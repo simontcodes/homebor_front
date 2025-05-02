@@ -1,0 +1,19 @@
+<div
+  class="homepage-wrapper"
+  [ngStyle]="{ 'background-color': config.themeColor || '#ffffff' }"
+  *ngIf="config"
+>
+  <div class="header">
+    <img [src]="config.logoUrl" alt="Tenant Logo" />
+    <h1>{{ config.welcomeMessage }}</h1>
+  </div>
+
+  <div class="featured-homes" *ngIf="config.featuredHomes?.length">
+    <h2>Featured Homes</h2>
+    <ul>
+      <li *ngFor="let home of config.featuredHomes">
+        {{ home }}
+      </li>
+    </ul>
+  </div>
+</div>
