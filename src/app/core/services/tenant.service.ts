@@ -1,8 +1,6 @@
-import { inject, Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-
+import { Observable, of } from 'rxjs';
 import { TENANT_SLUG } from '../../app.token';
 import { TenantConfig } from '../models/tenant-config.model';
 
@@ -18,22 +16,10 @@ export class TenantService {
   }
 
   private resolveSlug(): string {
-    const platformId = inject(PLATFORM_ID);
-
-    if (isPlatformBrowser(platformId)) {
-      const browserSlug = window.location.hostname.split('.')[0];
-      console.log('[TenantService] Slug from browser:', browserSlug);
-      return browserSlug;
+    if (isPlatformBrowser(this.platformId)) {
+      return window.location.hostname.split('.')[0];
     }
-
-    try {
-      const tokenSlug = inject(TENANT_SLUG);
-      console.log('[TenantService] Slug from token:', tokenSlug);
-      return tokenSlug;
-    } catch {
-      console.warn('[TenantService] TENANT_SLUG not provided — using default');
-      return 'default';
-    }
+    return this.injectedSlug || 'homebor';
   }
 
   getTenantSlug(): string {
@@ -60,8 +46,18 @@ export class TenantService {
         welcomeMessage: 'Feel at home with Cozy Stays.',
         featuredHomes: ['Vancouver Lake House', 'Ottawa Student Flat'],
       },
+      'homebor': {
+        slug: 'homebor',
+        name: 'Homebor Platform',
+        logoUrl: 'assets/logo.png',
+        themeColor: '#F1F1F1',
+        welcomeMessage: 'Welcome to Homebor — Find the perfect homestay in Canada!',
+        featuredHomes: ['Toronto Cozy Loft', 'Downtown Montreal Room'],
+        contactEmail: 'hello@homebor.ca',
+        showNewsletterSignup: true,
+      },
     };
 
-    return of(configs[slug] || configs['maple-homes']);
+    return of(configs[slug] || configs['homebor']);
   }
 }

@@ -1,10 +1,9 @@
 import { Routes } from '@angular/router';
+import { publicRoutes } from './public/public.routes';
+import { privateRoutes } from './private/private.routes';
 
 export const routes: Routes = [
-  {
-    path: '',
-    loadChildren: () =>
-      import('./public/public.routes').then((m) => m.publicRoutes),
-  },
+  ...publicRoutes,
+  ...privateRoutes,
   { path: '**', redirectTo: '' },
 ];

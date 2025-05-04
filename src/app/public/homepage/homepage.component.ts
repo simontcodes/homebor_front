@@ -5,20 +5,33 @@ import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { TenantConfig } from '../../core/models/tenant-config.model';
 import { TenantService } from '../../core/services/tenant.service';
+import { IndexNavbarComponent } from "../../components/index-navbar/index-navbar.component";
+import { FooterComponent } from '../../components/footer/footer.component';
 
 @Component({
   selector: 'app-homepage',
-  imports: [CommonModule],
+  imports: [CommonModule, IndexNavbarComponent, FooterComponent, RouterModule],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
 })
 export class HomepageComponent implements OnInit {
-  config?: TenantConfig;
+  config: TenantConfig = {
+    slug: 'homebor',
+    name: 'Homebor Platform',
+    logoUrl: 'assets/logo.png',
+    themeColor: '#F1F1F1',
+    welcomeMessage: 'Welcome to Homebor — Find the perfect homestay in Canada!',
+    featuredHomes: ['Toronto Cozy Loft', 'Downtown Montreal Room'],
+    contactEmail: 'hello@homebor.ca',
+    showNewsletterSignup: true,
+  }
   private platformId = inject(PLATFORM_ID);
 
+  currentYear = new Date().getFullYear();
   constructor(
     private route: ActivatedRoute,
     private tenantService: TenantService,
