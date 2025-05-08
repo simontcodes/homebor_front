@@ -7,5 +7,4 @@ export interface CreateUserDto {
     password: string;
     role: UserRole;
     date_of_birth: string;
-    tenantSlug: string;
   }

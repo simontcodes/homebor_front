@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateUserDto } from '../../../core/dto/createUser.dto';
 
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -28,7 +29,7 @@ export class RegisterComponent implements OnInit {
         last_name: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         confirm_email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        password: ['', [Validators.required, this.passwordStrengthValidator]],
         date_of_birth: ['', Validators.required],
         role: ['admmin'], 
       },
@@ -46,21 +47,36 @@ export class RegisterComponent implements OnInit {
     return email === confirm ? null : { emailMismatch: true };
   }
 
-  onSubmit() {
+  passwordStrengthValidator(control: AbstractControl) {
+    const value = control.value;
+    if (!value) return null;
+    const hasUpperCase = /[A-Z]+/.test(value);
+    const hasLowerCase = /[a-z]+/.test(value);
+    const hasNumeric = /[0-9]+/.test(value);
+    const passwordValid = hasUpperCase && hasLowerCase && hasNumeric;
+    return !passwordValid ? { weakPassword: true } : null;
+  }
+
+  onSubmit(): void {
     if (this.registerForm.invalid) return;
-
+  
     const formValue = this.registerForm.value;
-    const { confirm_email, ...userDto } = formValue;
-
-    this.authService.register({
-      ...userDto,
-      date_of_birth: new Date(formValue.date_of_birth).toISOString().split('T')[0],
-    }).subscribe({
+  
+    const userDto: CreateUserDto = {
+      first_name: formValue.first_name,
+      last_name: formValue.last_name,
+      email: formValue.email,
+      password: formValue.password,
+      role: formValue.role,
+      date_of_birth: new Date(formValue.date_of_birth).toISOString().split('T')[0], // YYYY-MM-DD
+    };
+  
+    this.authService.register(userDto).subscribe({
       next: () => this.router.navigate(['/login']),
       error: (err) => {
         this.errorMessage = err.error?.message || 'Registration failed';
         console.error(err);
-      }
+      },
     });
   }
 }
