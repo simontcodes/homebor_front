@@ -1,4 +1,4 @@
-type UserRole = 'super' | 'admin' | 'coordinator';
+import { UserRole } from '../enums/user-roles.enum';
 
 export interface CreateUserDto {
     first_name: string;
