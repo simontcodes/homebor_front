@@ -7,13 +7,21 @@
     <div
       class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start"
     >
-      <a
-        [routerLink]="['/']"
-        class="text-blueGray-700 text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
-        href="#pablo"
-      >
-        {{ TenantCongif.slug }}
-      </a>
+      <ng-container *ngIf="config$ | async as cfg; else loading">
+  <a [routerLink]="['/']" class="inline-block mr-4 py-2">
+    <img
+      [src]="cfg.logoUrl"
+      (error)="onImgError($event)"
+      [alt]="cfg.name"
+      class="h-8"
+    />
+    <ng-template #showSlug>{{ cfg.slug }}</ng-template>
+  </a>
+</ng-container>
+
+<ng-template #loading>
+  <p>Loading tenant config…</p>
+</ng-template>
       <button
         class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
         type="button"
@@ -27,7 +35,7 @@
       [ngClass]="{ hidden: !navbarOpen, block: navbarOpen }"
       id="example-navbar-warning"
     >
-      <ul class="flex flex-col lg:flex-row list-none mr-auto">
+      <!-- <ul class="flex flex-col lg:flex-row list-none mr-auto">
         <li class="flex items-center">
           <a
             class="hover:text-blueGray-500 text-blueGray-700 px-3 py-2 flex items-center text-xs uppercase font-bold"
@@ -39,7 +47,7 @@
             Docs
           </a>
         </li>
-      </ul>
+      </ul> -->
       <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
         <li class="flex items-center">
           <app-index-dropdown class="block"></app-index-dropdown>
@@ -83,7 +91,7 @@
               class="text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
               type="button"
             >
-              <i class="fas fa-arrow-alt-circle-down"></i> Log In
+              Log In
             </button>
           </a>
         </li>
@@ -94,7 +102,7 @@
               class="bg-red-600 text-white active:bg-red-700 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
               type="button"
             >
-              <i class="fas fa-arrow-alt-circle-down"></i> Sign Up
+              Sign Up
             </button>
           </a>
         </li>

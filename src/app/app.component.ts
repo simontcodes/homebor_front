@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
       console.log('[App] Loaded tenant config:', cfg);
 
       // set <title>
-      this.titleService.setTitle(cfg.welcomeMessage);
+      this.titleService.setTitle(`${slug} | ${cfg.websiteTitle}`);
 
       // meta tags
       this.meta.updateTag({ name: 'description', content: `${cfg.name} — ${cfg.welcomeMessage}` });
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 
       // favicon
       if (isPlatformBrowser(this.platformId)) {
-        this.setFavicon(cfg.logoUrl);
+        this.setFavicon(cfg.faviconUrl);
       }
     });
   }

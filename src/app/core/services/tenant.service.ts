@@ -10,7 +10,6 @@ import { ApiResponse } from '../types/api-response';
 import { Tenant } from '../models/tenant.model';
 import { CreateTenantDto } from '../dto/createTenant.dto';
 
-
 @Injectable({ providedIn: 'root' })
 export class TenantService {
   private slug: string;
@@ -18,9 +17,12 @@ export class TenantService {
     slug: 'homebor',
     name: 'Homebor Platform',
     logoUrl: 'assets/logo.png',
+    faviconUrl: 'assets/favicon.ico',
+    heroText: '',
+    heroImageUrl: '',
     themeColor: '#F1F1F1',
     welcomeMessage: 'Welcome to Homebor — Find the perfect homestay in Canada!',
-    featuredHomes: [],
+    websiteTitle: 'Homebor Platform',
     contactEmail: 'hello@homebor.ca',
     showNewsletterSignup: true,
   });
@@ -32,7 +34,7 @@ export class TenantService {
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Optional() @Inject(TENANT_SLUG) injectedSlug?: string,
+    @Optional() @Inject(TENANT_SLUG) injectedSlug?: string
   ) {
     this.slug = injectedSlug || this.resolveSlug();
   }
@@ -48,7 +50,9 @@ export class TenantService {
     return this.slug;
   }
 
-    createTenant(dto: CreateTenantDto): Observable<ApiResponse<{ tenant: Tenant; user: any }>> {
+  createTenant(
+    dto: CreateTenantDto
+  ): Observable<ApiResponse<{ tenant: Tenant; user: any }>> {
     // assuming your backend endpoint is POST /tenants
     return this.http.post<ApiResponse<{ tenant: Tenant; user: any }>>(
       `${this.baseUrl}tenants`,
@@ -56,26 +60,43 @@ export class TenantService {
     );
   }
 
+  // tenant.service.ts
   loadConfig(slug: string = this.slug): Observable<TenantConfig> {
     return this.http
-      .get<ApiResponse<TenantConfig>>(
-        `${this.baseUrl}/tenant-config/by-slug/${encodeURIComponent(slug)}`
+      .get<ApiResponse<any>>(
+        `${this.baseUrl}tenant-config/by-slug/${encodeURIComponent(slug)}`
       )
       .pipe(
-        tap(response => {
-          // push the real config into your BehaviorSubject
-          this.configSubject.next(response.data);
+        map((resp) => {
+          const raw = resp.data;
+          // construct a full TenantConfig
+          return {
+            slug,
+            name: raw.websiteTitle || 'Unnamed Tenant',
+            logoUrl: raw.logoUrl,
+            faviconUrl: raw.faviconUrl,
+            heroText: raw.heroText,
+            heroImageUrl: raw.heroImageUrl,
+            themeColor: raw.themeColor,
+            welcomeMessage: raw.welcomeMessage,
+            websiteTitle: raw.websiteTitle,
+            contactEmail: raw.contactEmail,
+            showNewsletterSignup: raw.showNewsletterSignup,
+          } as TenantConfig;
         }),
-        map(response => response.data),
-        catchError(err => {
+        tap((cfg) => this.configSubject.next(cfg)),
+        catchError((err) => {
           console.error('Failed to load tenant config', err);
           const fallback: TenantConfig = {
             slug,
             name: 'Default Tenant',
             logoUrl: '',
+            faviconUrl: '',
+            heroText: '',
+            heroImageUrl: '',
             themeColor: '#FFFFFF',
             welcomeMessage: '',
-            featuredHomes: [],
+            websiteTitle: '',
             contactEmail: '',
             showNewsletterSignup: false,
           };
