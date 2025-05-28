@@ -1,11 +1,19 @@
-<div>
+<div class="min-h-screen w-full flex">
+  <!-- Sidebar -->
   <app-sidebar></app-sidebar>
-  <div class="relative md:ml-64 bg-blueGray-100">
+
+  <!-- Main content area -->
+  <div class="flex flex-col flex-grow md:ml-64 bg-blueGray-100">
+    <!-- Navbar + header -->
     <app-admin-navbar></app-admin-navbar>
     <app-header-stats></app-header-stats>
-    <div class="px-4 md:px-10 mx-auto w-full -m-24">
-      <router-outlet></router-outlet>
-      <app-footer-admin></app-footer-admin>
+
+    <!-- Page content area with scrollable body -->
+    <div class="flex flex-col flex-grow px-4 -mt-24 md:px-10 pt-6 pb-6 w-full overflow-hidden">
+      <div class="flex-grow min-h-0 overflow-auto">
+         <router-outlet></router-outlet>
+      </div>
+      <app-footer-admin class="sticky bottom-0"></app-footer-admin>
     </div>
   </div>
 </div>

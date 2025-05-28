@@ -12,7 +12,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   register(user: CreateUserDto) {
-    return this.http.post<ApiResponse<RegisterData>>(`${this.baseUrl}/register`, user);
+    return this.http.post<ApiResponse<RegisterData>>(`${this.baseUrl}/register-admin`, user);
   }
 
   login(credentials: LogInDto) {

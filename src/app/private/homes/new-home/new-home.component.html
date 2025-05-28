@@ -1,0 +1,463 @@
+<div
+  class="relative min-w-0 break-words w-full shadow-lg flex h-full rounded-md overflow-hidden"
+  [ngClass]="color === 'light' ? 'bg-white' : 'bg-red-900 text-white'"
+>
+  <div class="flex w-full h-full shadow-lg">
+    <!-- Vertical Stepper Sidebar -->
+    <div class="w-64 px-6 py-10 border-r border-gray-200 dark:border-gray-700">
+      <ng-container *ngFor="let step of steps; let i = index">
+        <div
+          class="flex items-start gap-3 py-4"
+          [ngClass]="{
+            'text-blue-600': stepIndex === i,
+            'text-gray-500': stepIndex !== i && i > stepIndex,
+            'text-green-600': i < stepIndex
+          }"
+        >
+          <div
+            class="w-5 h-5 rounded-full border-2 flex items-center justify-center font-semibold text-xs"
+            [ngClass]="{
+              'bg-blue-500 text-white border-blue-500': stepIndex === i,
+              'bg-gray-200 text-gray-600 border-gray-300':
+                stepIndex !== i && i > stepIndex,
+              'bg-green-500 text-white border-green-500': i < stepIndex
+            }"
+          >
+            {{ i + 1 }}
+          </div>
+          <div class="text-sm">
+            <div class="font-medium">{{ step }}</div>
+            <div *ngIf="stepIndex === i" class="text-xs text-blue-500">
+              In progress
+            </div>
+            <div *ngIf="i < stepIndex" class="text-xs text-green-500">
+              Completed
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Stepper Forms -->
+    <div class="flex flex-col flex-grow overflow-auto p-10 bg-white">
+      <mat-horizontal-stepper
+        [linear]="true"
+        #stepper
+        (selectionChange)="onStepChange($event)"
+        class="w-full"
+        hideHeader
+      >
+        <!-- Step 1 -->
+        <mat-step [stepControl]="firstFormGroup" label="House Info">
+          <form
+            [formGroup]="firstFormGroup"
+            class="flex flex-col gap-6 max-w-xl mx-auto"
+          >
+            <h2 class="text-2xl font-bold text-gray-800">
+              📇 House Information
+            </h2>
+
+            <mat-form-field
+              appearance="fill"
+              class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+            >
+              <mat-label>Phone</mat-label>
+              <input
+                matInput
+                formControlName="phone"
+                placeholder="e.g. (416) 555-1234"
+                class="dark:text-white"
+              />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="fill"
+              class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+            >
+              <mat-label>Address</mat-label>
+              <input
+                matInput
+                formControlName="address"
+                placeholder="e.g. 123 Main St, Toronto"
+                class="dark:text-white"
+              />
+            </mat-form-field>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Upload up to 3 pictures of your house
+              </label>
+
+              <!-- Custom Upload Button -->
+              <label
+                for="house-photo-upload"
+                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded shadow hover:bg-blue-700 cursor-pointer disabled:opacity-50"
+                [class.cursor-not-allowed]="housePhotos.length >= 3"
+              >
+                <i class="fa fa-upload"></i> Choose Files
+              </label>
+
+              <!-- Hidden File Input -->
+              <input
+                id="house-photo-upload"
+                type="file"
+                accept="image/*"
+                multiple
+                class="hidden"
+                (change)="onHousePhotosSelected($event)"
+                [disabled]="housePhotos.length >= 3"
+              />
+
+              <!-- Preview Thumbnails -->
+              <div class="mt-4 flex flex-wrap gap-4">
+                <img
+                  *ngFor="let photo of housePhotos"
+                  [src]="photo"
+                  class="w-24 h-24 object-cover rounded border border-gray-300 shadow-sm"
+                />
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button mat-flat-button color="primary" matStepperNext>
+                Continue
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Step 2 -->
+        <mat-step [stepControl]="secondFormGroup" label="Preferences">
+          <div class="flex justify-center">
+            <form
+              [formGroup]="secondFormGroup"
+              class="flex flex-col gap-6 max-w-xl w-full"
+            >
+              <h2 class="text-2xl font-bold text-gray-800 mb-4 mx-auto">
+                🏡 Homestay Preferences
+              </h2>
+
+              <div class="flex items-center gap-6">
+                <label class="w-48">Has pets?</label>
+                <mat-button-toggle-group formControlName="pets" color="primary">
+                  <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+                  <mat-button-toggle [value]="false">No</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+
+              <div class="flex items-center gap-6">
+                <label class="w-48">Provides food service?</label>
+                <mat-button-toggle-group
+                  formControlName="food_service"
+                  color="primary"
+                >
+                  <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+                  <mat-button-toggle [value]="false">No</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+
+              <div class="flex items-center gap-6">
+                <label class="w-48">Supports special diet?</label>
+                <mat-button-toggle-group
+                  formControlName="special_diet"
+                  color="primary"
+                >
+                  <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+                  <mat-button-toggle [value]="false">No</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+
+              <mat-form-field
+                appearance="fill"
+                class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+              >
+                <mat-label>Age Preference</mat-label>
+                <mat-select
+                  formControlName="age_preference"
+                  class="dark:text-white"
+                >
+                  <mat-option value="">No preference</mat-option>
+                  <mat-option value="under_18">Under 18</mat-option>
+                  <mat-option value="18_25">18–25</mat-option>
+                  <mat-option value="26_35">26–35</mat-option>
+                  <mat-option value="36_50">36–50</mat-option>
+                  <mat-option value="50_plus">50+</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field
+                appearance="fill"
+                class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+              >
+                <mat-label>Gender Preference</mat-label>
+                <mat-select
+                  formControlName="gender_preference"
+                  class="dark:text-white"
+                >
+                  <mat-option value="">No preference</mat-option>
+                  <mat-option value="female">Female</mat-option>
+                  <mat-option value="male">Male</mat-option>
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div class="flex justify-between pt-4">
+                <button mat-stroked-button color="primary" matStepperPrevious>
+                  Back
+                </button>
+                <button mat-flat-button color="primary" matStepperNext>
+                  Continue
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-step>
+
+        <!-- Step 3 -->
+        <mat-step [stepControl]="thirdFormGroup" label="Room Details">
+          <form
+            [formGroup]="thirdFormGroup"
+            class="flex flex-col gap-6 max-w-xl mx-auto"
+          >
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+              🛏️ Room Details
+            </h2>
+
+            <mat-form-field
+              appearance="fill"
+              class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+            >
+              <mat-label>Number of Rooms Available</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="room_count"
+                (input)="onRoomCountChange()"
+                placeholder="e.g. 2"
+                class="dark:text-white"
+              />
+            </mat-form-field>
+
+            <div *ngIf="bedrooms.length > 0">
+              <div
+                *ngIf="bedrooms.at(currentBedroomIndex)"
+                [formGroup]="getBedroomFormGroup(currentBedroomIndex)"
+              >
+                <h3 class="text-lg font-semibold mb-2">
+                  Room {{ currentBedroomIndex + 1 }}
+                </h3>
+
+                <!-- Room Size Dropdown -->
+                <mat-form-field appearance="fill" class="w-full">
+                  <mat-label>Room Size</mat-label>
+                  <mat-select formControlName="size">
+                    <mat-option value="Small (8x10 ft)"
+                      >Small (8x10 ft)</mat-option
+                    >
+                    <mat-option value="Medium (10x12 ft)"
+                      >Medium (10x12 ft)</mat-option
+                    >
+                    <mat-option value="Large (12x14 ft)"
+                      >Large (12x14 ft)</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+
+                <!-- Bed Type Dropdown -->
+                <mat-form-field appearance="fill" class="w-full">
+                  <mat-label>Bed Type</mat-label>
+                  <mat-select formControlName="bed_type">
+                    <mat-option value="Single">Single</mat-option>
+                    <mat-option value="Double">Double</mat-option>
+                    <mat-option value="Queen">Queen</mat-option>
+                    <mat-option value="King">King</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <!-- Only the Room Upload section has changed; rest is assumed to be the same -->
+
+                <!-- Room Photo Upload (per bedroom) -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Upload up to 3 pictures for this room
+                  </label>
+
+                  <!-- Unique ID and File Binding per Room -->
+                  <label
+                    class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded shadow hover:bg-blue-700 cursor-pointer"
+                    [attr.for]="'bedroom-photo-upload-' + currentBedroomIndex"
+                    [class.cursor-not-allowed]="
+                      (bedroomPhotos[currentBedroomIndex] || []).length >= 3
+                    "
+                  >
+                    <i class="fa fa-upload"></i> Choose Files
+                  </label>
+
+                  <input
+                    type="file"
+                    [id]="'bedroom-photo-upload-' + currentBedroomIndex"
+                    accept="image/*"
+                    multiple
+                    class="hidden"
+                    (change)="
+                      onBedroomPhotosSelected($event, currentBedroomIndex)
+                    "
+                    [disabled]="
+                      (bedroomPhotos[currentBedroomIndex] || []).length >= 3
+                    "
+                  />
+
+                  <div class="mt-2 flex flex-wrap gap-4">
+                    <ng-container
+                      *ngIf="bedroomPhotos[currentBedroomIndex]?.length"
+                    >
+                      <img
+                        *ngFor="
+                          let photo of bedroomPhotos[currentBedroomIndex] || []
+                        "
+                        [src]="photo"
+                        class="w-24 h-24 object-cover rounded border border-gray-300"
+                      />
+                    </ng-container>
+                  </div>
+                </div>
+
+                <div class="flex justify-end mt-4">
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    (click)="nextBedroom()"
+                    [disabled]="!bedrooms.at(currentBedroomIndex).valid"
+                    *ngIf="currentBedroomIndex < bedrooms.length - 1"
+                  >
+                    Next Room
+                  </button>
+
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    matStepperNext
+                    [disabled]="!bedrooms.at(currentBedroomIndex).valid"
+                    *ngIf="currentBedroomIndex === bedrooms.length - 1"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Step 4: Household Members -->
+        <mat-step [stepControl]="fourthFormGroup" label="Household Members">
+          <form
+            [formGroup]="fourthFormGroup"
+            class="flex flex-col gap-6 max-w-3xl mx-auto"
+          >
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+              👨‍👩‍👧‍👦 Household Members
+            </h2>
+
+            <div formArrayName="residents">
+              <div
+                *ngFor="let resident of residents.controls; let i = index"
+                [formGroupName]="i"
+                class="border p-6 rounded-md mb-6 shadow-sm bg-white"
+              >
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <mat-form-field
+                    appearance="fill"
+                    class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+                  >
+                    <mat-label>Full Name</mat-label>
+                    <input
+                      matInput
+                      formControlName="full_name"
+                      class="dark:text-white"
+                    />
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="fill"
+                    class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+                  >
+                    <mat-label>Age</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="age"
+                      class="dark:text-white"
+                    />
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="fill"
+                    class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+                  >
+                    <mat-label>Occupation</mat-label>
+                    <input
+                      matInput
+                      formControlName="occupation"
+                      class="dark:text-white"
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!-- Styled File Upload -->
+                <div class="mt-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Upload Background Check (PDF or image)
+                  </label>
+
+                  <label
+                    [attr.for]="'resident-upload-' + i"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded shadow hover:bg-blue-700 cursor-pointer"
+                  >
+                    <i class="fa fa-upload"></i> Choose File
+                  </label>
+
+                  <input
+                    type="file"
+                    [id]="'resident-upload-' + i"
+                    accept="image/*,.pdf"
+                    class="hidden"
+                    (change)="onBackgroundFileChange($event, i)"
+                  />
+                </div>
+
+                <div class="text-right mt-4" *ngIf="residents.length > 1">
+                  <button
+                    type="button"
+                    class="text-sm text-red-500 underline"
+                    (click)="removeResident(i)"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-between pt-4">
+              <button mat-stroked-button color="primary" matStepperPrevious>
+                Back
+              </button>
+              <div class="flex gap-4">
+                <button
+                  type="button"
+                  mat-flat-button
+                  color="primary"
+                  (click)="addResident()"
+                >
+                  Add Another Person
+                </button>
+                <button mat-flat-button color="primary" (click)="onSubmit()">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+  </div>
+</div>

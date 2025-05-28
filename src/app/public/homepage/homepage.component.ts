@@ -28,7 +28,6 @@ export class HomepageComponent implements OnInit {
   ngOnInit(): void {
     this.tenantService.config$
       .subscribe(cfg => {
-        console.log('[Homepage] Tenant config:', cfg);
         this.config = cfg;
       });
   }

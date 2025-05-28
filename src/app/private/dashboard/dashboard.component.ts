@@ -3,6 +3,7 @@ import { CardLineChartComponent } from '../../components/card-line-chart/card-li
 import { CardBarChartComponent } from '../../components/card-bar-chart/card-bar-chart.component';
 import { CardPageVisitsComponent } from '../../components/card-page-visits/card-page-visits.component';
 import { CardSocialTrafficComponent } from '../../components/card-social-traffic/card-social-traffic.component';
+import { HeaderStatsComponent } from '../../components/header-stats/header-stats.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,7 @@ import { CardSocialTrafficComponent } from '../../components/card-social-traffic
     CardBarChartComponent,
     CardPageVisitsComponent,
     CardSocialTrafficComponent,
+    HeaderStatsComponent
   ],
   templateUrl: './dashboard.component.html',
 })

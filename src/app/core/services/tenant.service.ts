@@ -90,7 +90,7 @@ export class TenantService {
           const fallback: TenantConfig = {
             slug,
             name: 'Default Tenant',
-            logoUrl: '',
+            logoUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80',
             faviconUrl: '',
             heroText: '',
             heroImageUrl: '',

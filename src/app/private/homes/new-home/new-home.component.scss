@@ -1,0 +1,25 @@
+::ng-deep .mat-horizontal-stepper-header {
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+::ng-deep .mat-step-icon {
+  background-color: #e5e7eb; /* Tailwind slate-200 */
+  color: #374151; /* Tailwind gray-700 */
+  font-weight: 600;
+}
+
+::ng-deep .mat-step-icon-selected {
+  background-color: #3b82f6; /* Tailwind blue-500 */
+  color: #ffffff;
+}
+
+::ng-deep .mat-step-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1f2937; /* Tailwind gray-800 */
+}
+
+::ng-deep .mat-step-label.mat-step-label-active {
+  color: #3b82f6; /* Tailwind blue-500 */
+}

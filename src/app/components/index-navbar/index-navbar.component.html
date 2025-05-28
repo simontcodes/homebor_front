@@ -1,4 +1,14 @@
+<ng-template #loading>
+  <nav class="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-white shadow">
+    <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
+      <p class="text-sm text-gray-500">Loading tenant config…</p>
+    </div>
+  </nav>
+</ng-template>
+
+<ng-container *ngIf="config$ | async as cfg; else loading">
 <nav
+ 
   class="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-white shadow"
 >
   <div
@@ -50,7 +60,7 @@
       </ul> -->
       <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
         <li class="flex items-center">
-          <app-index-dropdown class="block"></app-index-dropdown>
+          <!-- <app-index-dropdown class="block"></app-index-dropdown> -->
         </li>
         <li class="flex items-center">
           <a
@@ -99,7 +109,8 @@
         <li class="flex items-center">
           <a [routerLink]="['/register']">
             <button
-              class="bg-red-600 text-white active:bg-red-700 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+            [ngStyle]="{ 'background-color': cfg.themeColor }"
+              class="text-white active:bg-red-700 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
               type="button"
             >
               Sign Up
@@ -110,3 +121,4 @@
     </div>
   </div>
 </nav>
+</ng-container>

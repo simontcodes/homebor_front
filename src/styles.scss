@@ -3,3 +3,84 @@
 @tailwind utilities;
 
 @import './tailwind.css'; 
+
+html, body {
+  @apply h-full m-0;
+}
+
+
+::ng-deep .mat-form-field {
+  border-radius: 0.5rem;
+  padding-inline: 0.5rem;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); // Tailwind blue-500 focus ring
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+::ng-deep .mat-step-icon {
+  color: #374151; /* Tailwind gray-700 */
+  font-weight: 600;
+}
+
+::ng-deep .mat-step-icon-selected {
+  background-color: #3b82f6; /* Tailwind blue-500 */
+  color: #ffffff;
+}
+
+::ng-deep .mat-step-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1f2937; /* Tailwind gray-800 */
+}
+
+::ng-deep .mat-step-label.mat-step-label-active {
+  color: #3b82f6; /* Tailwind blue-500 */
+}
+
+::ng-deep .mat-step-icon-state-done {
+  background-color: #10b981 !important; /* Tailwind green-500 */
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start,
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
+  border-left-style: solid;
+}
+
+::ng-deep .mat-mdc-notch-piece.mdc-notched-outline__leading {
+  display: none;
+}
+
+.mat-horizontal-stepper-header-container {
+  display: none !important;
+}
+
+::ng-deep .mat-stepper-horizontal {
+  background-color: white !important;
+}
+
+// ::ng-deep .mat-stepper-vertical {
+//   background-color: white !important;
+// }
+
+::ng-deep label .mat-mdc-floating-label {
+  // Your styles here
+  margin-top: 2rem;
+}
+
+// ::ng-deep .mat-stepper-horizontal {
+//   background-color: transparent !important;
+//   --mat-stepper-container-color: transparent;
+//   --mat-sys-surface: transparent;
+// }
+
+// ::ng-deep .mat-stepper-vertical {
+//   background-color: transparent !important;
+//   --mat-stepper-container-color: transparent;
+//   --mat-sys-surface: transparent;
+// }

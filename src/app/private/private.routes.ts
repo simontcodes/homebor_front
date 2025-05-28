@@ -7,6 +7,7 @@ import { DashboardAccessGuard } from '../core/guards/dashboar-access.guard';
 import { CreateTenantComponent } from './tenant/create-tenant.component';
 import { CreateTenantAccessGuard } from '../core/guards/create-tenant-access.guard';
 import { HomesComponent } from './homes/homes.component';
+import { NewHomeComponent } from './homes/new-home/new-home.component';
 
 export const privateRoutes: Routes = [
   {
@@ -16,7 +17,7 @@ export const privateRoutes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'homes', component: HomesComponent },
-      {path: 'homes/new', component: HomesComponent},
+      {path: 'homes/new', component: NewHomeComponent},
     ],
   },
   {
