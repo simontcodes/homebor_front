@@ -4,15 +4,15 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-homes',
+  selector: 'app-clients',
   imports: [
     TableDropdownComponent,
     CommonModule,
   ],
-  templateUrl: './homes.component.html',
+  templateUrl: './clients.component.html',
 })
-export class HomesComponent implements OnInit {
-  TableName = 'Homes';
+export class ClientsComponent implements OnInit {
+  TableName = 'Clients';
   @Input() color: 'light' | 'dark' = 'light';
   constructor(private router: Router) {}
 

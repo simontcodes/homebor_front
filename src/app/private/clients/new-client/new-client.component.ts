@@ -21,24 +21,20 @@ import { HomeService } from '@app/core/services/home.service';
 import { SignatureCanvasComponent } from 'src/app/components/signature-canvas/signature-canvas.component';
 
 @Component({
-  selector: 'app-new-home',
+  selector: 'app-new-client',
   standalone: true,
-  templateUrl: './new-home.component.html',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatStepperModule,
-    MatCardModule,
-    SignaturePadModule,
-    SignatureCanvasComponent,
-  ],
+  templateUrl: './new-client.component.html',
+  imports: [ CommonModule,
+      ReactiveFormsModule,
+      MatInputModule,
+      MatButtonModule,
+      MatButtonToggleModule,
+      MatSelectModule,
+      MatOptionModule,
+      MatStepperModule,
+      MatCardModule,],
 })
-export class NewHomeComponent implements OnInit {
+export class NewClientComponent implements OnInit {
   @Input() color: 'light' | 'dark' = 'light';
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild('signatureCanvas', { static: true })
@@ -46,8 +42,7 @@ export class NewHomeComponent implements OnInit {
 
   stepIndex = 0;
 
-  private ctx!: CanvasRenderingContext2D;
-  private drawing = false;
+
 
   signatureDataUrl = ''; // Final base64 image
 
@@ -89,8 +84,10 @@ export class NewHomeComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this.fb.group({
-      phone: ['', Validators.required],
-      address: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      date_of_birth: ['', Validators.required],
+      gender: ['', Validators.required]
     });
 
     this.secondFormGroup = this.fb.group({
@@ -115,68 +112,9 @@ export class NewHomeComponent implements OnInit {
       residents: this.fb.array([this.createResidentGroup()]),
     });
 
-    const canvas = this.signatureCanvas.nativeElement;
-    this.ctx = canvas.getContext('2d')!;
-    this.ctx.strokeStyle = 'black';
-    this.ctx.lineWidth = 2;
-    //** quitar lo de la firma de aqui que ya lo estas importando */
-
-    // Mouse
-    canvas.addEventListener('mousedown', this.startDraw);
-    canvas.addEventListener('mouseup', this.endDraw);
-    canvas.addEventListener('mousemove', this.draw);
-
-    // Touch
-    canvas.addEventListener('touchstart', this.startDraw);
-    canvas.addEventListener('touchend', this.endDraw);
-    canvas.addEventListener('touchmove', this.draw);
   }
 
-  // Signature pad handlers
-  startDraw = (event: MouseEvent | TouchEvent) => {
-    this.drawing = true;
-    const { x, y } = this.getEventPosition(event);
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
-  };
-
-  draw = (event: MouseEvent | TouchEvent) => {
-    if (!this.drawing) return;
-    event.preventDefault();
-    const { x, y } = this.getEventPosition(event);
-    this.ctx.lineTo(x, y);
-    this.ctx.stroke();
-  };
-
-  endDraw = () => {
-    this.drawing = false;
-    this.signatureDataUrl = this.signatureCanvas.nativeElement.toDataURL();
-  };
-
-  getEventPosition(event: MouseEvent | TouchEvent): { x: number; y: number } {
-    const canvas = this.signatureCanvas.nativeElement;
-    const rect = canvas.getBoundingClientRect();
-
-    if (event instanceof TouchEvent) {
-      return {
-        x: event.touches[0].clientX - rect.left,
-        y: event.touches[0].clientY - rect.top,
-      };
-    } else {
-      return {
-        x: (event as MouseEvent).clientX - rect.left,
-        y: (event as MouseEvent).clientY - rect.top,
-      };
-    }
-  }
-
-  clearSignature() {
-    const canvas = this.signatureCanvas.nativeElement;
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    this.signatureDataUrl = '';
-  }
-
-  // Forms
+   // Forms
   createResidentGroup(): FormGroup {
     return this.fb.group({
       full_name: ['', Validators.required],

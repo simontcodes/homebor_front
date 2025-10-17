@@ -54,17 +54,17 @@
             class="flex flex-col gap-6 max-w-xl mx-auto"
           >
             <h2 class="text-2xl font-bold text-gray-800">
-              📇 House Information
+              Personal Information
             </h2>
 
             <mat-form-field
               appearance="fill"
               class="w-full dark:bg-gray-800 rounded-md shadow-sm"
             >
-              <mat-label>Phone</mat-label>
+              <mat-label>First Name</mat-label>
               <input
                 matInput
-                formControlName="phone"
+                formControlName="first_name"
                 placeholder="e.g. (416) 555-1234"
                 class="dark:text-white"
               />
@@ -74,50 +74,44 @@
               appearance="fill"
               class="w-full dark:bg-gray-800 rounded-md shadow-sm"
             >
-              <mat-label>Address</mat-label>
+              <mat-label>Last Name</mat-label>
               <input
                 matInput
-                formControlName="address"
+                formControlName="last_name"
                 placeholder="e.g. 123 Main St, Toronto"
                 class="dark:text-white"
               />
             </mat-form-field>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Upload up to 3 pictures of your house
-              </label>
+            <mat-form-field
+              appearance="fill"
+              class="w-full dark:bg-gray-800 rounded-md shadow-sm"
+            >
 
-              <!-- Custom Upload Button -->
-              <label
-                for="house-photo-upload"
-                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded shadow hover:bg-blue-700 cursor-pointer disabled:opacity-50"
-                [class.cursor-not-allowed]="housePhotos.length >= 3"
-              >
-                <i class="fa fa-upload"></i> Choose Files
-              </label>
-
-              <!-- Hidden File Input -->
+              <mat-label>Date of Birth</mat-label>
               <input
-                id="house-photo-upload"
-                type="file"
-                accept="image/*"
-                multiple
-                class="hidden"
-                (change)="onHousePhotosSelected($event)"
-                [disabled]="housePhotos.length >= 3"
+                matInput
+                type="date"
+                formControlName="last_name"
+                class="dark:text-white"
               />
+            </mat-form-field>
 
-              <!-- Preview Thumbnails -->
-              <div class="mt-4 flex flex-wrap gap-4">
-                <img
-                  *ngFor="let photo of housePhotos"
-                  [src]="photo"
-                  class="w-24 h-24 object-cover rounded border border-gray-300 shadow-sm"
-                />
-              </div>
-            </div>
-
+            <mat-form-field appearance="fill" class="w-full">
+                  <mat-label>Room Size</mat-label>
+                  <mat-select formControlName="size">
+                    <mat-option value="Small (8x10 ft)"
+                      >Male</mat-option
+                    >
+                    <mat-option value="Medium (10x12 ft)"
+                      >Female</mat-option
+                    >
+                    <mat-option value="Large (12x14 ft)"
+                      >Other</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+    
             <div class="flex justify-end pt-4">
               <button mat-flat-button color="primary" matStepperNext>
                 Continue
@@ -462,26 +456,6 @@
 
               <div class="border border-gray-300 rounded-md shadow-sm bg-white p-2">
                 <!-- Reusable component -->
-                <app-signature-canvas
-                  #sig
-                  [width]="600"
-                  [height]="200"
-                  [strokeColor]="'#000'"
-                  [lineWidth]="2"
-                  (signatureChange)="signatureDataUrl = $event"
-                ></app-signature-canvas>
-
-                <div class="flex justify-end mt-2">
-                  <button
-                    mat-stroked-button
-                    color="primary"
-                    class="text-sm"
-                    type="button"
-                    (click)="sig.clear()"
-                  >
-                    Clear Signature
-                  </button>
-                </div>
               </div>
             </div>
 

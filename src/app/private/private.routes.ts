@@ -8,6 +8,9 @@ import { CreateTenantComponent } from './tenant/create-tenant.component';
 import { CreateTenantAccessGuard } from '../core/guards/create-tenant-access.guard';
 import { HomesComponent } from './homes/homes.component';
 import { NewHomeComponent } from './homes/new-home/new-home.component';
+import { ClientsComponent } from './clients/clients.component';
+import { PairingsComponent } from './pairings/pairings.component';
+import { NewClientComponent } from './clients/new-client/new-client.component';
 
 export const privateRoutes: Routes = [
   {
@@ -17,15 +20,16 @@ export const privateRoutes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'homes', component: HomesComponent },
-      {path: 'homes/new', component: NewHomeComponent},
+      { path: 'homes/new', component: NewHomeComponent },
+      { path: 'clients', component: ClientsComponent },
+      { path: 'clients/new', component: NewClientComponent },
+      { path: 'pairings', component: PairingsComponent },
     ],
   },
   {
     path: '',
     component: AuthComponent,
     canActivate: [CreateTenantAccessGuard],
-    children: [
-      { path: 'create-tenant', component: CreateTenantComponent },
-    ],
-  }
+    children: [{ path: 'create-tenant', component: CreateTenantComponent }],
+  },
 ];
